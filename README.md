@@ -29,8 +29,9 @@ MAIL_ENCRYPTION=ssl
 and start using 
 
 ```php
-$mailer = (new Mailer)
-    ->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
+$mailer = (new Mailer(
+    new Mailer\Transport
+))->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
     ->alwaysReplyTo('reply_to@gmailcom', 'Reply name');
 ```
 
