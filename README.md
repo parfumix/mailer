@@ -94,7 +94,8 @@ You can use directly ***Mailer*** and send messages by using ***::to('to_email@g
 
 ```php
 
-$mailer->to('to_email@gmail.com', 'Subject')->send('This is a test message');
+$mailer->to('to_email@gmail.com', 'Subject')
+    ->send('This is a test message');
 
 $mailer->to('to_email@gmail.com', 'Subject')->send('Message body', null, function (\Mailer\Message $message) {
     return $message->setFrom('other_from_email@gmail.com');
@@ -112,9 +113,15 @@ class NewPayment extends \Mailer\Mail
     }
 }
 
-Mailer::to(array(
+$mailer->to(array(
     'to_email@gmail.com'
 ))->send( new NewPayment('Subject message') );
 ```
 
+You can change driver using ***with*** method:
 
+```php
+$mailer->to('to_email@gmail.com', 'Subject')
+    ->with('sendmail')
+    ->send('This is a test message');
+```
