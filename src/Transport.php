@@ -3,6 +3,7 @@
 namespace Mailer;
 
 use Mailer\Transport\ArrayTransport;
+use Mailer\Transport\LogTransport;
 
 class Transport extends Manager {
 
@@ -99,7 +100,11 @@ class Transport extends Manager {
      *
      */
     protected function createLogDriver() {
-        #@todo add log driver
+        return new LogTransport(
+            isset($this->config['log_path'])
+                ? $this->config['log_path']
+                : (isset($_ENV['MAIL_LOG_PATH']) ? $_ENV['MAIL_LOG_PATH'] : null)
+        );
     }
 
     /**
@@ -108,7 +113,9 @@ class Transport extends Manager {
      * @return string
      */
     public function getDefaultDriver() {
-        return $this->config['driver'];
+        return isset($this->config['driver'])
+            ? $this->config['driver']
+            : (isset($_ENV['MAIL_DRIVER']) ? $_ENV['MAIL_DRIVER'] : null);
     }
 
     /**
