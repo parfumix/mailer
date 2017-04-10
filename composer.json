@@ -1,0 +1,26 @@
+{
+  "name": "parfumix/mailer",
+  "type": "library",
+  "description": "Mailer based on swift mailer.",
+  "keywords": ["mailer", "swift-mailer"],
+  "homepage": "https://github.com/parfumix/mailer",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Radu",
+      "email": "radu.bordei89@gmail.com",
+      "homepage": "http://github.com/parfumix/",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "swiftmailer/swiftmailer": "5.x"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mailer\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
