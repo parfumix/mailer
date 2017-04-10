@@ -17,13 +17,15 @@ to your composer.json file
 
 # Usage
 
+You can use directly ***Mailer*** and send messages by using ***::to()*** method
+
 ```php
 Mailer::to('to_email@gmail.com')->send('This is a test message', null, function ($message) {
     return $message->setFrom('from_email@gmail.com');
 });
 ```
 
-Or you can create ***Mailable*** classes which like this
+or you can create ***Mailable*** classes which require ***build*** method
 
 ```php
 class NewPayment extends \Mailer\Mail
