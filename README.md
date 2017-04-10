@@ -63,9 +63,9 @@ class ArrayTransport extends Transport
      */
     public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
         $this->beforeSendPerformed($message);
-
-        $this->messages[] = $message;
-
+        
+        // Send your message
+    
         return $this->numberOfRecipients($message);
     }
 }
