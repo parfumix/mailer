@@ -11,7 +11,7 @@ class Transport extends Manager {
      */
     private $config;
 
-    public function __construct(array $config) {
+    public function __construct(array $config = array()) {
         $this->config = $config;
     }
 
@@ -21,22 +21,39 @@ class Transport extends Manager {
      * @return \Swift_SmtpTransport
      */
     protected function createSmtpDriver() {
-        $transport = \Swift_SmtpTransport::newInstance(
-            $this->config['host'], $this->config['port']
-        );
+        $host = isset($this->config['host'])
+            ? $this->config['host']
+            : ( isset($_ENV['MAIL_HOST']) ? $_ENV['MAIL_HOST'] : null );
 
-        if (isset($this->config['encryption'])) {
-            $transport->setEncryption($this->config['encryption']);
-        }
+        $port = isset($this->config['port'])
+            ? $this->config['port']
+            : ( isset($_ENV['MAIL_PORT']) ? $_ENV['MAIL_PORT'] : null );
+
+        $transport = \Swift_SmtpTransport::newInstance($host, $port);
+
+        $encryption = isset($this->config['encryption'])
+            ? $this->config['encryption']
+            : ( isset($_ENV['MAIL_ENCRYPTION']) ? $_ENV['MAIL_ENCRYPTION'] : null );
+
+        if ($encryption)
+            $transport->setEncryption($encryption);
 
         // Once we have the transport we will check for the presence of a username
         // and password. If we have it we will set the credentials on the Swift
         // transporter instance so that we'll properly authenticate delivery.
-        if (isset($this->config['username'])) {
-            $transport->setUsername($this->config['username']);
+        $username = isset($this->config['username'])
+            ? $this->config['username']
+            : (isset($_ENV['MAIL_USERNAME']) ? $_ENV['MAIL_USERNAME'] : null);
 
-            $transport->setPassword($this->config['password']);
-        }
+        $password = isset($this->config['password'])
+            ? $this->config['password']
+            : (isset($_ENV['MAIL_PASSWORD']) ? $_ENV['MAIL_PASSWORD'] : null);
+
+        if( $username )
+            $transport->setUsername($username);
+
+        if( $password )
+            $transport->setPassword($password);
 
         // Next we will set any stream context options specified for the transport
         // and then return it. The option is not required any may not be inside
@@ -55,7 +72,7 @@ class Transport extends Manager {
      */
     protected function createSendmailDriver() {
         return \Swift_SendmailTransport::newInstance(
-            isset($this->config['sendmail']) ?: null
+            isset($this->config['sendmail']) ?: isset($_ENV['sendmail']) ? $_ENV['sendmail'] : null
         );
     }
 
