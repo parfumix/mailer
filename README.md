@@ -18,26 +18,25 @@ to your composer.json file
 # Usage
 
 ```php
-    Mailer::to('to_email@gmail.com')->send('This is a test message', null, function ($message) {
-        return $message->setFrom('from_email@gmail.com');
-    });
+Mailer::to('to_email@gmail.com')->send('This is a test message', null, function ($message) {
+    return $message->setFrom('from_email@gmail.com');
+});
 ```
 
 Or you can create ***Mailable*** classes which like this
 
 ```php
-    class NewPayment extends \Mailer\Mail
-        implements \Mailer\Mailable {
+class NewPayment extends \Mailer\Mail
+    implements \Mailer\Mailable {
 
-        public function build() {
-            $this->text('Body message');
-        }
+    public function build() {
+        $this->text('Body message');
     }
-    
-    Mailer::to(array(
-        'to_email@gmail.com'
-    ))->send( new NewPayment('Subject message') );
+}
 
+Mailer::to(array(
+    'to_email@gmail.com'
+))->send( new NewPayment('Subject message') );
 ```
 
 
