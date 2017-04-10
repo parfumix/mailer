@@ -33,8 +33,8 @@ class Mailer {
     /** @var   */
     protected $to;
 
-    public function __construct($to, $subject = null) {
-        $this->createMessage( $to, $subject );
+    public function __construct(array $config = array()) {
+        $this->config = $config;
     }
 
     /**
@@ -46,7 +46,7 @@ class Mailer {
      * @internal param null $subject
      */
     public static function to($to, $setFrom = true) {
-        $mailer = (new self($to));
+        $mailer = (new self)->createMessage($to);
 
         if( $setFrom ) {
             $from = is_array($to) ? array_pop($to) : $to;
