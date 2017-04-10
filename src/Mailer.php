@@ -3,16 +3,12 @@
 namespace Mailer;
 
 use Mailer\Exceptions\InvalidDriverException;
+use Mailer\Transport\TransportAble;
 
 class Mailer {
 
     /** @var   */
     protected $swiftMailer;
-
-    /**
-     * @var
-     */
-    protected $config;
 
     /**
      * @var
@@ -33,8 +29,12 @@ class Mailer {
     /** @var   */
     protected $to;
 
-    public function __construct(array $config = array()) {
-        $this->config = $config;
+    /**
+     * Mailer constructor.
+     * @param Transport $transport
+     */
+    public function __construct(Transport $transport) {
+        $this->transport = $transport;
     }
 
     /**
@@ -46,7 +46,7 @@ class Mailer {
      */
     public function to($to, $subject = null) {
         $mailer = (new self(
-            $this->config
+            $this->transport
         ));
 
         foreach (['from', 'reply_to', 'to'] as $type) {
@@ -146,10 +146,7 @@ class Mailer {
      * @throws InvalidDriverException
      */
     public function with($name) {
-        if(! $this->getTransport()->driver( $name ))
-            throw new InvalidDriverException('Invalid driver');
-
-        $this->getTransport()->setDefaultDriver( $name );
+        $this->transport->setDefaultDriver( $name );
 
         return $this;
     }
@@ -180,20 +177,6 @@ class Mailer {
     }
 
     /**
-     * Get transport instance
-     *
-     * @return Transport
-     */
-    protected function getTransport() {
-        if(! $this->transport)
-            $this->transport = new Transport(
-                $this->getConfig()
-            );
-
-        return $this->transport;
-    }
-
-    /**
      * Get swift mailer instance .
      * @return \Swift_Mailer
      * @internal param array $config
@@ -201,39 +184,10 @@ class Mailer {
     protected function getSwiftMailer() {
         if(! $this->swiftMailer)
             $this->swiftMailer = new \Swift_Mailer(
-                $this->getTransport()->driver()
+                $this->transport->driver()
             );
 
         return $this->swiftMailer;
-    }
-
-
-    /**
-     * Set config .
-     *
-     * @param array $config
-     * @return $this
-     */
-    public function setConfig(array $config) {
-        $this->config = $config;
-
-        return $this;
-    }
-
-    /**
-     * Get configuration .
-     *
-     * @return array
-     */
-    public function getConfig() {
-        return array_merge($this->config, array(
-            'driver' => isset($_ENV['MAIL_DRIVER']) ? $_ENV['MAIL_DRIVER'] : null,
-            'host' => isset($_ENV['MAIL_HOST']) ? $_ENV['MAIL_HOST'] : null,
-            'port' => isset($_ENV['MAIL_PORT']) ? $_ENV['MAIL_PORT'] : null,
-            'username' => isset($_ENV['MAIL_USERNAME']) ? $_ENV['MAIL_USERNAME'] : null,
-            'password' => isset($_ENV['MAIL_PASSWORD']) ? $_ENV['MAIL_PASSWORD'] : null,
-            'encryption' => isset($_ENV['MAIL_ENCRYPTION']) ? $_ENV['MAIL_ENCRYPTION'] : null,
-        ));
     }
 
 }

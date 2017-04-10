@@ -2,6 +2,8 @@
 
 namespace Mailer;
 
+use Mailer\Exceptions\InvalidDriverException;
+
 abstract class Manager {
 
     /**
@@ -10,6 +12,13 @@ abstract class Manager {
      * @var array
      */
     protected $drivers = [];
+
+    /**
+     * Custom drivers
+     *
+     * @var array
+     */
+    protected $customCreators = [];
 
     /**
      * Get the default driver name.
@@ -42,12 +51,40 @@ abstract class Manager {
      * @throws \Exception
      */
     protected function createDriver($driver) {
-        $method = 'create' . ucfirst($driver) . 'Driver';
+        if (isset($this->customCreators[$driver])) {
 
-        if (method_exists($this, $method))
-            return $this->$method();
+            return $this->callCustomCreator($driver);
+        } else {
+            $method = 'create' . ucfirst($driver) . 'Driver';
 
-        throw new \Exception("Driver [$driver] not supported.");
+            if (method_exists($this, $method))
+                return $this->$method();
+        }
+
+        throw new InvalidDriverException("Driver [$driver] not supported.");
+    }
+
+    /**
+     * Call a custom driver creator.
+     *
+     * @param  string $driver
+     * @return mixed
+     */
+    protected function callCustomCreator($driver) {
+        return $this->customCreators[$driver]($this);
+    }
+
+    /**
+     * Register a custom driver creator Closure.
+     *
+     * @param  string $driver
+     * @param  \Closure $callback
+     * @return $this
+     */
+    public function extend($driver, \Closure $callback) {
+        $this->customCreators[$driver] = $callback;
+
+        return $this;
     }
 
     /**

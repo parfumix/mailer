@@ -2,6 +2,8 @@
 
 namespace Mailer;
 
+use Mailer\Transport\ArrayTransport;
+
 class Transport extends Manager {
 
     /**
@@ -64,6 +66,15 @@ class Transport extends Manager {
      */
     protected function createMailDriver() {
         return \Swift_MailTransport::newInstance();
+    }
+
+    /**
+     * Create array driver .
+     *
+     * @return ArrayTransport
+     */
+    protected function createArrayDriver() {
+        return new ArrayTransport;
     }
 
     /**
