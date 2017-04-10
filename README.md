@@ -17,7 +17,7 @@ to your composer.json file
 
 # Usage
 
-You can use directly ***Mailer*** and send messages by using ***::to()*** method
+You can use directly ***Mailer*** and send messages by using ***::to('to_email@gmail.com')*** method
 
 ```php
 Mailer::to('to_email@gmail.com')->send('This is a test message', null, function ($message) {
