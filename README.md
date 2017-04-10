@@ -15,10 +15,10 @@ to your composer.json file
 
 # Configuration
 
-If you use DotEnv package all you have to do is to populat you ***.env*** file
+If you use DotEnv package all you have to do is to populate your ***.env*** file.
 
 ```env
-MAIL_DRIVER=smtp
+MAIL_DRIVER=smtp // Allow to select transport
 MAIL_HOST=smtp.gmail.com
 MAIL_PORT=465
 MAIL_USERNAME=your_gmail@gmail.com
@@ -46,9 +46,37 @@ $config = array(
     'encryption' => 'ssl'
 );
 
-$mailer = (new Mailer($config))
-    ->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
+$mailer = (new Mailer\Mailer(
+    new Mailer\Transport( $config )
+))->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
     ->alwaysReplyTo('reply_to@gmailcom', 'Reply name');
+```
+
+If you want add custom transport all you have to do is to create new transport class which implement ***TransportAble***
+
+```php
+
+class ArrayTransport extends Transport
+    implements TransportAble {
+    /**
+     * {@inheritdoc}
+     */
+    public function send(Swift_Mime_Message $message, &$failedRecipients = null) {
+        $this->beforeSendPerformed($message);
+
+        $this->messages[] = $message;
+
+        return $this->numberOfRecipients($message);
+    }
+}
+
+$tranport = (new Mailer\Transport([
+    'driver' => 'my_driver'
+]))
+    ->extend('my_driver', function($transport) {
+        return new ArrayTransport()
+    })
+
 ```
     
 # Usage
