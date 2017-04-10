@@ -41,18 +41,16 @@ class Mailer {
      * Send email to ?
      *
      * @param $to
-     * @param bool $setFrom
+     * @param null $subject
      * @return Mailer
-     * @internal param null $subject
      */
-    public static function to($to, $setFrom = true) {
-        $mailer = (new self)->createMessage($to);
+    public function to($to, $subject = null) {
+        $mailer = (new self(
+            $this->config
+        ))->createMessage($to);
 
-        if( $setFrom ) {
-            $from = is_array($to) ? array_pop($to) : $to;
-
-            $mailer->message->setFrom($from);
-        }
+        if( ! is_null($subject) )
+            $mailer->message->setSubject($subject);
 
         return $mailer;
     }
