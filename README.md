@@ -26,19 +26,41 @@ MAIL_PASSWORD=your_password
 MAIL_ENCRYPTION=ssl
 ```
 
-If you use other storage repository you can create new Mailer instance and populate with config data
+and start using 
 
 ```php
-    $mailer = 
+$mailer = (new Mailer)
+    ->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
+    ->alwaysReplyTo('reply_to@gmailcom', 'Reply name');
 ```
 
+If you use other storage repository you can create new Mailer instance and populate with config data from array
+
+```php
+$config = array(
+    'driver' => 'smtp',
+    'host' => 'smtp.gmail.com',
+    'port' => 465,
+    'username' => 'you_email@gmail.com',
+    'password' => 'your_passwd',
+    'encryption' => 'ssl'
+);
+
+$mailer = (new Mailer($config))
+    ->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
+    ->alwaysReplyTo('reply_to@gmailcom', 'Reply name');
+```
+    
 # Usage
 
 You can use directly ***Mailer*** and send messages by using ***::to('to_email@gmail.com')*** method
 
 ```php
-Mailer::to('to_email@gmail.com')->send('This is a test message', null, function ($message) {
-    return $message->setFrom('from_email@gmail.com');
+
+$mailer->to('to_email@gmail.com', 'Subject')->send('This is a test message');
+
+$mailer->to('radu.bordei89@gmail.com', 'Subject')->send('Message body', null, function (\Mailer\Message $message) {
+    return $message->setFrom('other_from_email@gmail.com');
 });
 ```
 
