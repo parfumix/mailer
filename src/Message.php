@@ -69,6 +69,61 @@ class Message {
      * Add a recipient to the message.
      *
      * @param  string|array $address
+     * @param  string|null $name
+     * @param  bool $override
+     * @return $this
+     */
+    public function to($address, $name = null, $override = false) {
+        if ($override) {
+            $this->swiftMessage->setTo($address, $name);
+
+            return $this;
+        }
+
+        return $this->addAddresses($address, $name, 'To');
+    }
+
+    /**
+     * Add a carbon copy to the message.
+     *
+     * @param  string|array $address
+     * @param  string|null $name
+     * @param  bool $override
+     * @return $this
+     */
+    public function cc($address, $name = null, $override = false) {
+        if ($override) {
+            $this->swiftMessage->setCc($address, $name);
+
+            return $this;
+        }
+
+        return $this->addAddresses($address, $name, 'Cc');
+    }
+
+    /**
+     * Add a blind carbon copy to the message.
+     *
+     * @param  string|array $address
+     * @param  string|null $name
+     * @param  bool $override
+     * @return $this
+     */
+    public function bcc($address, $name = null, $override = false) {
+        if ($override) {
+            $this->swiftMessage->setBcc($address, $name);
+
+            return $this;
+        }
+
+        return $this->addAddresses($address, $name, 'Bcc');
+    }
+
+
+    /**
+     * Add a recipient to the message.
+     *
+     * @param  string|array $address
      * @param  string $name
      * @param  string $type
      * @return $this

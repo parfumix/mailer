@@ -3,7 +3,6 @@
 namespace Mailer;
 
 use Mailer\Exceptions\InvalidDriverException;
-use Mailer\Transport\TransportAble;
 
 class Mailer {
 
