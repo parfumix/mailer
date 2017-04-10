@@ -12,6 +12,11 @@ class Mailer {
     /**
      * @var
      */
+    protected $config;
+
+    /**
+     * @var
+     */
     protected $message;
 
     /**
@@ -196,14 +201,26 @@ class Mailer {
         return $this->swiftMailer;
     }
 
+
     /**
-     * Get default mail configuration .
+     * Set config .
      *
-     * @param array $default
+     * @param array $config
+     * @return $this
+     */
+    public function setConfig(array $config) {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * Get configuration .
+     *
      * @return array
      */
-    protected function getConfig(array $default = array()) {
-        return array_merge($default, array(
+    public function getConfig() {
+        return array_merge($this->config, array(
             'driver' => env('MAIL_DRIVER'),
             'host' => env('MAIL_HOST'),
             'port' => env('MAIL_PORT'),
@@ -212,4 +229,5 @@ class Mailer {
             'encryption' => env('MAIL_ENCRYPTION'),
         ));
     }
+
 }
