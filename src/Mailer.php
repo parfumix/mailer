@@ -47,7 +47,15 @@ class Mailer {
     public function to($to, $subject = null) {
         $mailer = (new self(
             $this->config
-        ))->createMessage($to);
+        ));
+
+        foreach (['from', 'reply_to', 'to'] as $type) {
+            if( isset($type->{$type}) && !empty($this->{$type}) ) {
+                call_user_func_array(array($mailer, 'always' . ucfirst($type)), $this->{$type});
+            }
+        }
+
+        $mailer->createMessage($to);
 
         if( ! is_null($subject) )
             $mailer->message->setSubject($subject);
@@ -219,12 +227,12 @@ class Mailer {
      */
     public function getConfig() {
         return array_merge($this->config, array(
-            'driver' => env('MAIL_DRIVER'),
-            'host' => env('MAIL_HOST'),
-            'port' => env('MAIL_PORT'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
-            'encryption' => env('MAIL_ENCRYPTION'),
+            'driver' => isset($_ENV['MAIL_DRIVER']) ? $_ENV['MAIL_DRIVER'] : null,
+            'host' => isset($_ENV['MAIL_HOST']) ? $_ENV['MAIL_HOST'] : null,
+            'port' => isset($_ENV['MAIL_PORT']) ? $_ENV['MAIL_PORT'] : null,
+            'username' => isset($_ENV['MAIL_USERNAME']) ? $_ENV['MAIL_USERNAME'] : null,
+            'password' => isset($_ENV['MAIL_PASSWORD']) ? $_ENV['MAIL_PASSWORD'] : null,
+            'encryption' => isset($_ENV['MAIL_ENCRYPTION']) ? $_ENV['MAIL_ENCRYPTION'] : null,
         ));
     }
 
