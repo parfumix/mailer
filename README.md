@@ -59,7 +59,7 @@ You can use directly ***Mailer*** and send messages by using ***::to('to_email@g
 
 $mailer->to('to_email@gmail.com', 'Subject')->send('This is a test message');
 
-$mailer->to('radu.bordei89@gmail.com', 'Subject')->send('Message body', null, function (\Mailer\Message $message) {
+$mailer->to('to_email@gmail.com', 'Subject')->send('Message body', null, function (\Mailer\Message $message) {
     return $message->setFrom('other_from_email@gmail.com');
 });
 ```
