@@ -92,7 +92,9 @@ abstract class Mail {
      * @return $this
      */
     public function buildFrom(Message $message) {
-        $message->setFrom($this->from);
+        if(! is_null($this->from)) {
+            $message->setFrom($this->from);
+        }
 
         return $this;
     }
@@ -118,7 +120,8 @@ abstract class Mail {
      * @return $this
      */
     public function buildSubject(Message $message) {
-        $message->setSubject($this->subject);
+        if(! is_null($this->subject))
+            $message->setSubject($this->subject);
 
         return $this;
     }

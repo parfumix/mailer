@@ -49,16 +49,16 @@ class Mailer {
             $this->transport
         ));
 
-        foreach (['from', 'reply_to', 'to'] as $type) {
-            if( isset($type->{$type}) && !empty($this->{$type}) ) {
-                call_user_func_array(array($mailer, 'always' . ucfirst($type)), $this->{$type});
+        foreach (['from', 'replyTo', 'to'] as $type) {
+            if( !empty($this->{$type}) ) {
+                call_user_func_array(array($mailer, 'always' . ucfirst($type)), is_array($this->{$type})
+                    ? $this->{$type}
+                    : $this->{$type}
+                );
             }
         }
 
-        $mailer->createMessage($to);
-
-        if( ! is_null($subject) )
-            $mailer->message->setSubject($subject);
+        $mailer = $mailer->createMessage($to, $subject);
 
         return $mailer;
     }

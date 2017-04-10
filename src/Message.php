@@ -42,6 +42,48 @@ class Message {
     public function attachData() {}
 
     /**
+     * Add a "from" address to the message.
+     *
+     * @param  string|array $address
+     * @param  string|null $name
+     * @return $this
+     */
+    public function from($address, $name = null) {
+        $this->swiftMessage->setFrom($address, $name);
+
+        return $this;
+    }
+
+    /**
+     * Add a reply to address to the message.
+     *
+     * @param  string|array $address
+     * @param  string|null $name
+     * @return $this
+     */
+    public function replyTo($address, $name = null) {
+        return $this->addAddresses($address, $name, 'ReplyTo');
+    }
+
+    /**
+     * Add a recipient to the message.
+     *
+     * @param  string|array $address
+     * @param  string $name
+     * @param  string $type
+     * @return $this
+     */
+    protected function addAddresses($address, $name, $type) {
+        if (is_array($address)) {
+            $this->swiftMessage->{"set{$type}"}($address, $name);
+        } else {
+            $this->swiftMessage->{"add{$type}"}($address, $name);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set body .
      *
      * @param Template $template
