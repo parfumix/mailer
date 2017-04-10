@@ -69,7 +69,11 @@ class ArrayTransport extends Transport
         return $this->numberOfRecipients($message);
     }
 }
+```
 
+And register driver to Transport class.
+
+```php
 $tranport = (new Mailer\Transport([
     'driver' => 'my_driver'
 ]))
