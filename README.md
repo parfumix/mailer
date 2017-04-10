@@ -59,6 +59,7 @@ If you want add custom transport all you have to do is to create new transport c
 
 class ArrayTransport extends Transport
     implements TransportAble {
+    
     /**
      * {@inheritdoc}
      */
@@ -77,10 +78,9 @@ And register driver to Transport class.
 ```php
 $tranport = (new Mailer\Transport([
     'driver' => 'my_driver'
-]))
-    ->extend('my_driver', function($transport) {
-        return new ArrayTransport()
-    });
+]))->extend('my_driver', function($transport) {
+    return new ArrayTransport()
+});
     
 $mailer = (new Mailer($tranport))
 ->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
