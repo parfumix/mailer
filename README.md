@@ -80,7 +80,11 @@ $tranport = (new Mailer\Transport([
 ]))
     ->extend('my_driver', function($transport) {
         return new ArrayTransport()
-    })
+    });
+    
+$mailer = (new Mailer($tranport))
+->alwaysFrom('your_email_always_from@gmail.com', 'Your name')
+    ->alwaysReplyTo('reply_to@gmailcom', 'Reply name');
 
 ```
     
