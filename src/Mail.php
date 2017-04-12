@@ -126,6 +126,12 @@ abstract class Mail {
         return $this;
     }
 
+    /**
+     * Build attachments
+     *
+     * @param Message $message
+     * @return $this
+     */
     public function buildAttachments(Message $message) {
         foreach ($this->attachments as $attachment) {
             $message->attach($attachment['file'], $attachment['options']);
@@ -226,7 +232,7 @@ abstract class Mail {
      * @param array $viewData
      * @return $this
      */
-    public function view($view, array $viewData) {
+    public function view($view, array $viewData = []) {
         $this->view = $view;
 
         $this->viewData = $viewData;
@@ -243,6 +249,7 @@ abstract class Mail {
      */
     public function text($textView, array $data = []) {
         $this->textView = $textView;
+
         $this->viewData = array_merge($this->viewData, $data);
 
         return $this;
