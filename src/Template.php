@@ -33,13 +33,7 @@ class Template {
 
         $content = $plain;
         if(! is_null($view)) {
-            $layout = getMailLayout();
-
-            $layout->getView()->assign($this->data);
-
-            $layout->content = $layout->getView()->render( $view );
-
-            $content = $layout->render();
+            $content = $view;
         } elseif ( ! is_null($raw) ) {
             $content = $raw;
         }
