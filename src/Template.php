@@ -50,7 +50,7 @@ class Template {
     protected function parseView($view) {
         if( is_string($view) ) {
             return array(
-                null, $view, null
+                $view, null, null
             );
         }
 

@@ -48,7 +48,8 @@ abstract class Mail {
         return $mailer->send($this->buildView(), $this->buildViewData(), function ($message) {
             $this->buildFrom($message)
                 ->buildTo($message)
-                ->buildSubject($message);
+                ->buildSubject($message)
+                ->buildAttachments($message);
         });
     }
 
@@ -60,7 +61,7 @@ abstract class Mail {
      */
     public function buildView() {
         if (isset($this->view)) {
-            return $this->view;
+            return ['html' => $this->view];
         } elseif (isset($this->textView)) {
             return ['text' => $this->textView];
         }
