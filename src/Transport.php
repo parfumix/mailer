@@ -73,7 +73,7 @@ class Transport extends Manager {
      */
     protected function createSendmailDriver() {
         return \Swift_SendmailTransport::newInstance(
-            isset($this->config['sendmail']) ?: isset($_ENV['sendmail']) ? $_ENV['sendmail'] : null
+            isset($this->config['command']) ?: isset($_ENV['MAIL_COMMAND']) ? $_ENV['MAIL_COMMAND'] : null
         );
     }
 
